@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "415726204355",
+    "project_id": "bookavio-7ffc4",
+    "storage_bucket": "bookavio-7ffc4.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:415726204355:android:23442321d86e8a6e47f976",
+        "android_client_info": {
+          "package_name": "com.example.bookavio"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC4hey9Bhzwp4AShKGrzGiLhPWIFlnijG4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
