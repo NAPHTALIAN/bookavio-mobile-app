@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'provider_listing_page.dart';
 
 class ServicesPage extends StatefulWidget {
   const ServicesPage({super.key});
@@ -10,67 +11,43 @@ class ServicesPage extends StatefulWidget {
 class _ServicesPageState extends State<ServicesPage> {
   final TextEditingController _searchController = TextEditingController();
   String _searchQuery = '';
+  String? _expandedServiceTitle;
 
   final List<Map<String, dynamic>> _allServices = [
     {
-      'title': 'Tutoring',
-      'description': 'Expert academic guidance and personalized learning support',
+      'title': 'Tutors',
+      'description': 'Find the best tutors for your needs.',
       'icon': Icons.school,
-      'color': Colors.blue,
+      'color': Colors.blue.shade400,
+      'subServices': [
+        'Maths Tutors',
+        'Chemisty Tutors',
+        'Physics Tutors',
+        'Languages',
+      ],
     },
     {
-      'title': 'Sport Coach',
-      'description': 'Professional sports training and performance enhancement',
+      'title': 'Pet Sitters & Trainers',
+      'description': 'Expert care for your pets.',
+      'icon': Icons.pets,
+      'color': Colors.green.shade400,
+      'subServices': [
+        'Dog Sitters',
+        'Dog Trainers',
+        'Cat Sitters',
+      ],
+    },
+    {
+      'title': 'Coaches',
+      'description': 'Achieve your goals with our professional coaches.',
       'icon': Icons.sports,
-      'color': Colors.green,
-    },
-    {
-      'title': 'Life Coach',
-      'description': 'Personal development and life transformation guidance',
-      'icon': Icons.self_improvement,
-      'color': Colors.purple,
-    },
-    {
-      'title': 'Health Trainer',
-      'description': 'Holistic health and wellness coaching',
-      'icon': Icons.health_and_safety,
-      'color': Colors.red,
-    },
-    {
-      'title': 'Spiritual Coach',
-      'description': 'Spiritual growth and mindfulness guidance',
-      'icon': Icons.spa,
-      'color': Colors.indigo,
-    },
-    {
-      'title': 'Business Coach',
-      'description': 'Business strategy and entrepreneurial guidance',
-      'icon': Icons.business,
-      'color': Colors.orange,
-    },
-    {
-      'title': 'Financial Advisor',
-      'description': 'Financial planning and investment guidance',
-      'icon': Icons.account_balance,
-      'color': Colors.teal,
-    },
-    {
-      'title': 'Personal Trainer',
-      'description': 'Customized fitness and workout programs',
-      'icon': Icons.fitness_center,
-      'color': Colors.pink,
-    },
-    {
-      'title': 'Fitness Coach',
-      'description': 'Comprehensive fitness and exercise coaching',
-      'icon': Icons.directions_run,
-      'color': Colors.amber,
-    },
-    {
-      'title': 'Career Coach',
-      'description': 'Career development and professional growth guidance',
-      'icon': Icons.work,
-      'color': Colors.cyan,
+      'color': Colors.orange.shade400,
+      'subServices': [
+        'Wellness Coaches',
+        'Mental Health Coaches',
+        'Life Coaches',
+        'Psychologists (Licensed Therapists)',
+      ],
     },
   ];
 
@@ -95,143 +72,338 @@ class _ServicesPageState extends State<ServicesPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Colors.grey[50],
       body: SafeArea(
         child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.only(bottom: 80.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(20.0),
-                  child: Text(
-                    'Our Services',
-                    style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                          fontWeight: FontWeight.bold,
-                          color: Theme.of(context).colorScheme.primary,
-                        ),
-                  ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Text(
+                  'Find Your Expert',
+                  style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black87,
+                      ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.grey[100],
-                      borderRadius: BorderRadius.circular(12),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.1),
-                          spreadRadius: 1,
-                          blurRadius: 3,
-                          offset: const Offset(0, 1),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'How It Works',
+                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                            fontWeight: FontWeight.bold,
+                          ),
+                    ),
+                    const SizedBox(height: 16),
+                    const Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        _HowItWorksStep(
+                          icon: Icons.search,
+                          text: 'Find Service',
+                        ),
+                        _HowItWorksStep(
+                          icon: Icons.calendar_today,
+                          text: 'Book a Date',
+                        ),
+                        _HowItWorksStep(
+                          icon: Icons.payment,
+                          text: 'Pay Securely',
                         ),
                       ],
                     ),
-                    child: TextField(
-                      controller: _searchController,
-                      onChanged: (value) {
-                        setState(() {
-                          _searchQuery = value;
-                        });
-                      },
-                      decoration: InputDecoration(
-                        hintText: 'Search services...',
-                        prefixIcon: const Icon(Icons.search),
-                        suffixIcon: _searchQuery.isNotEmpty
-                            ? IconButton(
-                                icon: const Icon(Icons.clear),
-                                onPressed: () {
-                                  setState(() {
-                                    _searchController.clear();
-                                    _searchQuery = '';
-                                  });
-                                },
-                              )
-                            : null,
-                        border: InputBorder.none,
-                        contentPadding: const EdgeInsets.symmetric(
-                          horizontal: 16,
-                          vertical: 14,
-                        ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 30),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                child: Text(
+                  'Services',
+                  style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black87,
                       ),
+                ),
+              ),
+              const SizedBox(height: 10),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                child: TextField(
+                  controller: _searchController,
+                  onChanged: (value) {
+                    setState(() {
+                      _searchQuery = value;
+                    });
+                  },
+                  decoration: InputDecoration(
+                    hintText: 'Search for services...',
+                    prefixIcon: const Icon(Icons.search),
+                    filled: true,
+                    fillColor: Colors.white,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: BorderSide.none,
                     ),
+                    suffixIcon: _searchQuery.isNotEmpty
+                        ? IconButton(
+                            icon: const Icon(Icons.clear),
+                            onPressed: () {
+                              setState(() {
+                                _searchController.clear();
+                                _searchQuery = '';
+                              });
+                            },
+                          )
+                        : null,
                   ),
                 ),
-                const SizedBox(height: 20),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                  child: GridView.builder(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      childAspectRatio: 0.75,
-                      crossAxisSpacing: 16,
-                      mainAxisSpacing: 16,
+              ),
+              const SizedBox(height: 10),
+              ListView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                itemCount: _filteredServices.length,
+                itemBuilder: (context, index) {
+                  final service = _filteredServices[index];
+                  final bool hasSubServices =
+                      service.containsKey('subServices');
+                  final bool isExpanded =
+                      _expandedServiceTitle == service['title'];
+
+                  if (hasSubServices) {
+                    return Card(
+                      elevation: 4,
+                      shadowColor: Colors.grey.withOpacity(0.2),
+                      margin: const EdgeInsets.symmetric(vertical: 10.0),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                      child: Column(
+                        children: [
+                          InkWell(
+                            borderRadius: BorderRadius.circular(15.0),
+                            onTap: () {
+                              setState(() {
+                                _expandedServiceTitle =
+                                    isExpanded ? null : service['title'];
+                              });
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.all(16.0),
+                              child: Row(
+                                children: [
+                                  Container(
+                                    padding: const EdgeInsets.all(12),
+                                    decoration: BoxDecoration(
+                                      color:
+                                          service['color'].withOpacity(0.15),
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
+                                    child: Icon(
+                                      service['icon'],
+                                      size: 32,
+                                      color: service['color'],
+                                    ),
+                                  ),
+                                  const SizedBox(width: 16),
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          service['title'],
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .titleLarge
+                                              ?.copyWith(
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                        ),
+                                        const SizedBox(height: 4),
+                                        Text(
+                                          service['description'],
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodyMedium
+                                              ?.copyWith(
+                                                color: Colors.grey[600],
+                                              ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  Container(
+                                    margin: const EdgeInsets.only(left: 16),
+                                    decoration: BoxDecoration(
+                                      color: Colors.grey.shade200,
+                                      shape: BoxShape.circle,
+                                    ),
+                                    child: IconButton(
+                                      icon: Icon(
+                                          isExpanded
+                                              ? Icons.remove
+                                              : Icons.add,
+                                          color: Colors.black54),
+                                      onPressed: () {
+                                        setState(() {
+                                          _expandedServiceTitle = isExpanded
+                                              ? null
+                                              : service['title'];
+                                        });
+                                      },
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          if (isExpanded)
+                            const Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 16.0),
+                              child: Divider(height: 1),
+                            ),
+                          if (isExpanded)
+                            Column(
+                              children: (service['subServices'] as List<String>)
+                                  .map((subService) {
+                                return ListTile(
+                                  title: Text(subService),
+                                  trailing: const Icon(Icons.arrow_forward_ios,
+                                      size: 14),
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => ProviderListingPage(
+                                          service: service['title'],
+                                          subService: subService,
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                );
+                              }).toList(),
+                            ),
+                        ],
+                      ),
+                    );
+                  }
+
+                  return Card(
+                    elevation: 4,
+                    shadowColor: Colors.grey.withOpacity(0.2),
+                    margin: const EdgeInsets.symmetric(vertical: 10.0),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15),
                     ),
-                    itemCount: _filteredServices.length,
-                    itemBuilder: (context, index) {
-                      final service = _filteredServices[index];
-                      return Card(
-                        elevation: 4,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(16),
-                        ),
-                        child: InkWell(
-                          onTap: () {
-                            // TODO: Navigate to service details
-                          },
-                          borderRadius: BorderRadius.circular(16),
-                          child: Padding(
-                            padding: const EdgeInsets.all(12.0),
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Row(
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.all(12),
+                            decoration: BoxDecoration(
+                              color: service['color'].withOpacity(0.15),
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: Icon(
+                              service['icon'],
+                              size: 32,
+                              color: service['color'],
+                            ),
+                          ),
+                          const SizedBox(width: 16),
+                          Expanded(
                             child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Container(
-                                  padding: const EdgeInsets.all(10),
-                                  decoration: BoxDecoration(
-                                    color: service['color'].withOpacity(0.1),
-                                    shape: BoxShape.circle,
-                                  ),
-                                  child: Icon(
-                                    service['icon'],
-                                    size: 28,
-                                    color: service['color'],
-                                  ),
-                                ),
-                                const SizedBox(height: 8),
                                 Text(
                                   service['title'],
-                                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .titleLarge
+                                      ?.copyWith(
                                         fontWeight: FontWeight.bold,
                                       ),
-                                  textAlign: TextAlign.center,
                                 ),
                                 const SizedBox(height: 4),
                                 Text(
                                   service['description'],
-                                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyMedium
+                                      ?.copyWith(
                                         color: Colors.grey[600],
                                       ),
-                                  textAlign: TextAlign.center,
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
                                 ),
                               ],
                             ),
                           ),
-                        ),
-                      );
-                    },
-                  ),
-                ),
-                const SizedBox(height: 16),
-              ],
-            ),
+                          Container(
+                            margin: const EdgeInsets.only(left: 16),
+                            decoration: BoxDecoration(
+                              color: Colors.grey.shade200,
+                              shape: BoxShape.circle,
+                            ),
+                            child: IconButton(
+                              icon: const Icon(Icons.add, color: Colors.black54),
+                              onPressed: () {
+                                // TODO: Implement action
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                },
+              ),
+              const SizedBox(height: 20),
+            ],
           ),
         ),
       ),
+    );
+  }
+}
+
+class _HowItWorksStep extends StatelessWidget {
+  final IconData icon;
+  final String text;
+
+  const _HowItWorksStep({required this.icon, required this.text});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        CircleAvatar(
+          radius: 30,
+          backgroundColor: Colors.blue.shade50,
+          child: Icon(
+            icon,
+            size: 30,
+            color: Colors.blue.shade600,
+          ),
+        ),
+        const SizedBox(height: 8),
+        Text(
+          text,
+          style: TextStyle(
+            fontSize: 14,
+            fontWeight: FontWeight.w500,
+            color: Colors.grey.shade700,
+          ),
+        ),
+      ],
     );
   }
 }

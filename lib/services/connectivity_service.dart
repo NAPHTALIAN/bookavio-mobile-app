@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:connectivity_plus/connectivity_plus.dart';
-import 'package:internet_connection_checker/internet_connection_checker.dart';
+import 'dart:io' show InternetAddress;
+import 'package:flutter/foundation.dart' show kIsWeb;
 
 class ConnectivityService {
   static final ConnectivityService _instance = ConnectivityService._internal();
@@ -8,7 +9,6 @@ class ConnectivityService {
   ConnectivityService._internal();
 
   final Connectivity _connectivity = Connectivity();
-  final InternetConnectionChecker _internetChecker = InternetConnectionChecker();
   
   StreamController<bool> _connectionStatusController = StreamController<bool>.broadcast();
   Stream<bool> get connectionStatus => _connectionStatusController.stream;
@@ -33,8 +33,19 @@ class ConnectivityService {
     ConnectivityResult connectivityResult = await _connectivity.checkConnectivity();
     
     if (connectivityResult != ConnectivityResult.none) {
-      // Check if there's actual internet connectivity
-      _isConnected = await _internetChecker.hasConnection;
+      if (kIsWeb) {
+        // For web, we'll assume connection is available if connectivity is not none
+        _isConnected = true;
+      } else {
+        // For mobile platforms, we can do a more thorough check
+        try {
+          // Simple ping test for mobile platforms
+          final result = await InternetAddress.lookup('google.com');
+          _isConnected = result.isNotEmpty && result[0].rawAddress.isNotEmpty;
+        } catch (_) {
+          _isConnected = false;
+        }
+      }
     } else {
       _isConnected = false;
     }
